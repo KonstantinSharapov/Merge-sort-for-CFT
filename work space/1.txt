@@ -1,0 +1,20 @@
+4
+2
+90
+10      000000
+1200
+1390
+13030
+150
+
+cats
+girl
+john
+boob
+boys
+alah
+paul
+dock
+
+
+

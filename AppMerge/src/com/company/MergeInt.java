@@ -1,32 +1,20 @@
 package com.company;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class INTMerge {
+public class MergeInt {
 
     private long[] theArray;
     private int nElems;
 
     //передаем массив строк в массив чисел
-    public INTMerge(String[] arr){
+    public MergeInt(String[] arr){
         theArray = new long[arr.length];
         nElems = 0;
         for (String ect: arr){
-            theArray[nElems] = Integer.parseInt(onlyInt(ect));
-            nElems++;
-        }
-    }
-    //выбираем из строк только цифры
-    private String onlyInt(String str){
-        String result = "";
-        char[] arr = str.toCharArray();
-        for (char ect: arr) {
-            if (!Character.isDigit(ect) && Character.isDigit(ect) || Character.isDigit(ect)){
-                result = result.concat(String.valueOf(ect));
+            if (!containLeter(ect)){
+                theArray[nElems] = Integer.parseInt((onlyInt(ect)));
+                nElems++;
             }
         }
-        return result;
     }
     public int length(){
         return nElems;
@@ -39,18 +27,35 @@ public class INTMerge {
             System.out.print(theArray[i]+" ");
         System.out.println();
     }
-    public void sort(){
-        iterativeMerge(theArray);
+    //проверка на наличие прочих символов в строке
+    private boolean containLeter(String string){
+        for (int i = 0; i < string.length(); ++i) {
+            if (Character.isLetter(string.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //выбираем только числа из строк
+    private String onlyInt(String str){
+        String result = "";
+        char[] arr = str.toCharArray();
+        for (char ect: arr) {
+            if (Character.isDigit(ect)){
+                result = result.concat(String.valueOf(ect));
+            }
+        }
+        return result;
     }
     // восходящая сортировка
     // в первом мы увеличиваем размер в два раза
     // во втором мы проходим левую и правую часть подмассива, потом слияние и так далее
-    private void iterativeMerge(long[] arr){
+    public void sort(){
         for (int len = 1; len < nElems; len *= 2)
             for (int left = 0; left < nElems - len; left +=len+len){
                 int mid = left + len - 1;
                 int right = Math.min(left+len+len-1,nElems-1);
-                merge(arr,left, mid, right);
+                merge(theArray,left, mid, right);
             }
     }
     //сортировка слиянием на месте
@@ -86,3 +91,4 @@ public class INTMerge {
         }
     }
 }
+

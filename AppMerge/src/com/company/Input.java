@@ -10,8 +10,8 @@ public class Input {
     private String mainPath = System.getProperty("user.dir") + File.separator;
     private String[] argInput,listTXT;
 
-    private INTMerge INTMerge;
-    private MSD msd;
+    private MergeInt MergeInt;
+    private MergeStr mergeStr;
 
     public Input(String[] arg){
         argInput = arg;
@@ -29,32 +29,57 @@ public class Input {
             br.close();
         }
     }
-    private void sortTXT(String typeData){
+    private void sortTXT(String typeData) throws IOException {
+        File newFile = new File(argInput[2]);
+        if (!newFile.exists())
+            newFile.createNewFile();
+
         if (typeData.intern()=="-i"){
             listTXT = txt.split(wall);
-            INTMerge = new INTMerge(listTXT);
-            INTMerge.display();
-            INTMerge.sort();
+            MergeInt = new MergeInt(listTXT);
+            MergeInt.display();
+            MergeInt.sort();
+            write(newFile,typeData,argInput[1]);
         }
         else if (typeData.intern()=="-s"){
-
+            listTXT = txt.split(wall);
+            mergeStr = new MergeStr(listTXT);
+            mergeStr.display();
+            mergeStr.sort();
+            write(newFile,typeData,argInput[1]);
         }
     }
-    private void writeTXT(File file, String typeData) throws FileNotFoundException {
+    private void write(File file, String typeInt, String typeRec ) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter(file);
-        if (typeData.intern()=="-a"){
+        if (typeInt.intern()=="-i" && typeRec.intern() =="-a"){
             int cut = 0;
-            while (cut < INTMerge.length()){
-                System.out.print(INTMerge.getTheArray()[cut]+" ");
-                pw.println(INTMerge.getTheArray()[cut]);
+            while (cut < MergeInt.length()){
+                System.out.print(MergeInt.getTheArray()[cut]+" ");
+                pw.println(MergeInt.getTheArray()[cut]);
                 cut++;
             }
         }
-        else if (typeData.intern()=="-d"){
-            int cut = INTMerge.length() - 1;
+        else if (typeInt.intern()=="-i" && typeRec.intern() =="-d"){
+            int cut = MergeInt.length() - 1;
             while (cut != -1){
-                pw.println(INTMerge.getTheArray()[cut]);
-                System.out.print(INTMerge.getTheArray()[cut]+" ");
+                pw.println(MergeInt.getTheArray()[cut]);
+                System.out.print(MergeInt.getTheArray()[cut]+" ");
+                cut--;
+            }
+        }
+        else if (typeInt.intern()=="-s" && typeRec.intern() =="-a"){
+            int cut = 0;
+            while (cut < mergeStr.length()){
+                System.out.print(mergeStr.getTheArray()[cut]+" ");
+                pw.println(mergeStr.getTheArray()[cut]);
+                cut++;
+            }
+        }
+        else if (typeInt.intern()=="-s" && typeRec.intern() =="-d"){
+            int cut = mergeStr.length() - 1;
+            while (cut != -1){
+                pw.println(mergeStr.getTheArray()[cut]);
+                System.out.print(mergeStr.getTheArray()[cut]+" ");
                 cut--;
             }
         }
@@ -64,11 +89,7 @@ public class Input {
         pw.close();
     }
     public void stdOUT() throws IOException{
-        File newFile = new File(argInput[2]);
-        if (!newFile.exists())
-            newFile.createNewFile();
         readTXT();
         sortTXT(argInput[0]);
-        writeTXT(newFile,argInput[1]);
     }
 }
